@@ -1,0 +1,909 @@
+{
+  "checkedAt": "2026-10-29T04:59:43.980Z",
+  "scope": "synthetic in-memory accounts only; no user database, login, transaction or external bank",
+  "method": "26 fixed task cases, one run per case; deterministic assertions over candidate state, clarification, amounts, dates, preservation and no money movement; task success includes a correct explicit rule fallback, counted separately from accepted model output; selected cases additionally validate actual model allocation",
+  "caseCount": 26,
+  "passed": 26,
+  "failed": 0,
+  "modelAccepted": 26,
+  "fallbackCases": [],
+  "modelCalls": 28,
+  "totalMs": 31047,
+  "medianMs": 1021,
+  "results": [
+    {
+      "id": "F01",
+      "name": "一段话安排付款生活费和目标",
+      "message": "2026-11-03给林晓转3000元房租，留2000元生活费，再预留1000元买电脑，剩下的钱比较理财，90天不用。",
+      "passed": true,
+      "mode": "model",
+      "calls": 2,
+      "elapsedMs": 3486,
+      "expected": "check(s){eq(row(s).cents,300000);eq(row(s).date,date(5));eq(row(s).recipient,'lin');eq(candidate(s).reserve,200000);eq(candidate(s).earmarks.reduce((n,x)=>n+x.cents,0),100000);eq(candidate(s).invest,true);eq(candidate(s).horizon,90);eq(fundingFacts(s,s.fundingChat).available,400000);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "362dfc6f-68b1-4205-b24a-82fbd257218f",
+            "title": "买电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "cf20c993-c723-4a30-8e67-587f99458ace",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": {
+        "investment": 400000,
+        "protectedCents": 600000,
+        "projectedEnd": 300000,
+        "mode": "model"
+      }
+    },
+    {
+      "id": "F02",
+      "name": "中文金额与别名",
+      "message": "明天给小林转三千元，留两千元生活费，暂不理财。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 881,
+      "expected": "check(s){eq(row(s).cents,300000);eq(row(s).recipient,'lin');eq(row(s).date,date(1));eq(candidate(s).reserve,200000);eq(candidate(s).invest,false);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "03d90d57-aa39-4928-83f8-bfe79dd36fe8",
+            "title": "给小林转账",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-10-30",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F03",
+      "name": "小数金额精确到分",
+      "message": "今天给林晓转123.45元，留0元生活费，不理财。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 885,
+      "expected": "check(s){eq(row(s).cents,12345);eq(row(s).date,date(0));eq(candidate(s).reserve,0);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 0,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "2ea359cd-0d5e-4d60-9ca1-e74507ef4eec",
+            "title": "给林晓的转账",
+            "cents": 12345,
+            "recipient": "lin",
+            "date": "2026-10-29",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F04",
+      "name": "同别名收款人必须澄清",
+      "message": "明天给小陈转500元，留1000元生活费。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1159,
+      "expected": "check(s){eq(row(s).recipient,null);assert.ok(fundingFacts(s,s.fundingChat).questions.some(x=>x.key==='recipient'));}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 100000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "a2a60ecf-ec21-4389-a621-4e6906bb5451",
+            "title": "转给小陈",
+            "cents": 50000,
+            "recipient": null,
+            "date": "2026-10-30",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F05",
+      "name": "不能猜家人对应联系人",
+      "message": "明天给爸爸转500元，留1000元生活费。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1247,
+      "expected": "check(s){eq(row(s).recipient,null);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 100000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "bd2b97ae-8b95-4ccb-939e-a9895c365320",
+            "title": "给爸爸转账",
+            "cents": 50000,
+            "recipient": null,
+            "date": "2026-10-30",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F06",
+      "name": "未给日期时追问",
+      "message": "给林晓转600元，留1000元生活费。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 878,
+      "expected": "check(s){eq(row(s).date,null);assert.ok(fundingFacts(s,s.fundingChat).questions.some(x=>x.key==='date'));}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 100000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "304a3e6e-a6fb-407a-b784-d54b6f0a8129",
+            "title": "转给林晓",
+            "cents": 60000,
+            "recipient": "lin",
+            "date": null,
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F07",
+      "name": "未给金额时追问",
+      "message": "明天给林晓转一笔钱，生活费留1000元。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1175,
+      "expected": "check(s){eq(row(s).cents,null);assert.ok(fundingFacts(s,s.fundingChat).questions.some(x=>x.key==='amount'));}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 100000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "57a10fae-b15f-45f2-9327-0d89a396e68c",
+            "title": "给林晓转账",
+            "cents": null,
+            "recipient": "lin",
+            "date": "2026-10-30",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F08",
+      "name": "未给生活费不替用户填数",
+      "message": "明天给林晓转1000元。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1191,
+      "expected": "check(s){eq(candidate(s).reserve,null);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": null,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "3824ad12-9538-46fd-8002-a7ca4632c4f5",
+            "title": "给林晓转账",
+            "cents": 100000,
+            "recipient": "lin",
+            "date": "2026-10-30",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F09",
+      "name": "只改生活费保留其余事项",
+      "message": "生活费改成2500元，房租和电脑预留不变。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 910,
+      "expected": "check(s,b){eq(candidate(s).reserve,250000);same(candidate(s).transfers,b.transfers);same(candidate(s).earmarks,b.earmarks);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 250000,
+        "earmarks": [
+          {
+            "id": "33420573-5442-4b01-99df-8338a91c06ea",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "9f6246d6-a501-4b00-9f16-eef13548d65b",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F10",
+      "name": "只改付款日期",
+      "message": "房租的付款日期改为2026-11-05，金额和其他事项都不要变。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1115,
+      "expected": "check(s,b){eq(row(s).date,date(7));eq(row(s).id,b.transfers[0].id);eq(row(s).cents,300000);eq(candidate(s).reserve,200000);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "652a450f-10d7-45f7-938b-6573e85e2993",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "99745942-e27d-4e35-8629-95b141c8ba80",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-05",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F11",
+      "name": "只改付款金额",
+      "message": "房租改成2800元，日期不变，别的不要动。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 860,
+      "expected": "check(s,b){eq(row(s).cents,280000);eq(row(s).id,b.transfers[0].id);eq(row(s).date,b.transfers[0].date);same(candidate(s).earmarks,b.earmarks);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "7cf211af-d376-4af2-81f6-30282d492e4f",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "e3675d43-83f1-4145-9dc5-90d44212a629",
+            "title": "房租",
+            "cents": 280000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F12",
+      "name": "取消待付事项不取消其他目标",
+      "message": "取消房租付款，生活费和电脑预留以及理财需求保留。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 776,
+      "expected": "check(s,b){noTransfer(s);eq(candidate(s).reserve,b.reserve);same(candidate(s).earmarks,b.earmarks);eq(candidate(s).invest,true);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "e6710d11-9b5f-48f1-ba56-92c4f2e1d3ef",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F13",
+      "name": "只改目标预留",
+      "message": "电脑预留改成1500元，其他都不变。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 857,
+      "expected": "check(s,b){eq(candidate(s).earmarks[0].cents,150000);eq(candidate(s).earmarks[0].id,b.earmarks[0].id);same(candidate(s).transfers,b.transfers);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "b400a5a9-21d4-4ca2-ab9a-23b8a85789b7",
+            "title": "电脑",
+            "cents": 150000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "8914cf90-d68d-4e29-a417-c7ea8d14c15b",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F14",
+      "name": "暂停理财保留付款",
+      "message": "这次不理财了，房租和预留都照旧。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 617,
+      "expected": "check(s,b){eq(candidate(s).invest,false);same(candidate(s).transfers,b.transfers);eq(candidate(s).reserve,b.reserve);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "d69277ae-6653-4124-8e0f-c42e9d58dda6",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "beba08d4-16d9-4988-8a91-ce51533c7ef8",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": false,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F15",
+      "name": "更改最早用钱时间",
+      "message": "理财这笔钱改成30天后就要用，其他安排不变。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 664,
+      "expected": "check(s,b){eq(candidate(s).horizon,30);same(candidate(s).transfers,b.transfers);eq(candidate(s).reserve,b.reserve);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "7b6e0d1a-7001-411a-837f-1725a4c60671",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "fb01a79a-df16-43d1-a0fe-e9ee0fc63b03",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 30,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F16",
+      "name": "指定理财投入上限",
+      "message": "理财只投1000元，剩余保留现金，房租和其他预留不要动。",
+      "passed": true,
+      "mode": "model",
+      "calls": 2,
+      "elapsedMs": 2639,
+      "expected": "check(s,b){eq(candidate(s).investBudget,100000);same(candidate(s).transfers,b.transfers);eq(candidate(s).reserve,b.reserve);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "cf8eed75-853c-4156-a3de-d7b7e724c6ed",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "5c49ab33-5ba9-428c-ad67-8960e9205426",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": 100000,
+        "product": null
+      },
+      "preview": {
+        "investment": 40000,
+        "protectedCents": 600000,
+        "projectedEnd": 660000,
+        "mode": "model"
+      }
+    },
+    {
+      "id": "F17",
+      "name": "只问计算原因不改需求",
+      "message": "为什么只能安排4000元理财？请只解释，不要修改安排。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1165,
+      "expected": "check(s,b){same(candidate(s),b);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "6044771b-808a-40f6-b561-e40420a18854",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "f7b5ee9f-0ad7-4d58-8cf0-3db2dda90fa5",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F18",
+      "name": "否定新付款不添加转账",
+      "message": "不要给林晓额外转500元，现有房租不变，先只解释。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1506,
+      "expected": "check(s,b){same(candidate(s),b);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "c62043d6-d4ad-485f-9c6c-b664e3087466",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "c1037f9b-df9d-4021-8fff-5a1644c4e64e",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F19",
+      "name": "已过日期不能自动挪到今天",
+      "message": "2026-10-27给林晓转500元，留0元生活费。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 942,
+      "expected": "check(s){eq(row(s).date,date(-2));assert.ok(fundingFacts(s,s.fundingChat).questions.some(x=>x.key==='date'));}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 0,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "7142a7c2-4581-468b-862b-6e0bb91ce20b",
+            "title": "给林晓转账",
+            "cents": 50000,
+            "recipient": "lin",
+            "date": "2026-10-27",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F20",
+      "name": "两笔不同付款保留各自日期",
+      "message": "2026-10-31给林晓转500元，2026-11-02给陈宇转300元，留1000元生活费，暂不理财。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1464,
+      "expected": "check(s){const t=candidate(s).transfers;eq(t.length,2);eq(t.find(x=>x.recipient==='lin').date,date(2));eq(t.find(x=>x.recipient==='chen-b').cents,30000);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 100000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "6d45bc33-da28-44c7-87f7-c01c8b3bd775",
+            "title": "给林晓转账",
+            "cents": 50000,
+            "recipient": "lin",
+            "date": "2026-10-31",
+            "purpose": "transfer",
+            "category": "转账"
+          },
+          {
+            "id": "56946366-e599-460f-b6b5-819ee317c242",
+            "title": "给陈宇转账",
+            "cents": 30000,
+            "recipient": "chen-b",
+            "date": "2026-11-02",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F21",
+      "name": "已完成付款不能改写",
+      "message": "把已完成的房租付款改成2000元。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1021,
+      "expected": "check(s,b){same(candidate(s).transfers,b.transfers);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "8cdc42b5-fd18-4fde-b2be-21139165bead",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "f9c62c8b-9d7d-46d4-b4bd-dda927e174c7",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-10-29",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": false,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F22",
+      "name": "超出余额先提示不生成交易",
+      "message": "2026-10-30给林晓转9500元，留2000元生活费。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1001,
+      "expected": "check(s){eq(row(s).cents,950000);assert.ok(fundingFacts(s,s.fundingChat).warnings.some(x=>x.includes('还差')));}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "a228922f-5e27-46e0-b9d1-2b1525899f37",
+            "title": "给林晓转账",
+            "cents": 950000,
+            "recipient": "lin",
+            "date": "2026-10-30",
+            "purpose": "transfer",
+            "category": "转账"
+          }
+        ],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F23",
+      "name": "只留生活费不假装执行",
+      "message": "先留3000元生活费，其他还没想好。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 991,
+      "expected": "check(s){eq(candidate(s).reserve,300000);noTransfer(s);eq(candidate(s).invest,false);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 300000,
+        "earmarks": [],
+        "transfers": [],
+        "invest": false,
+        "horizon": null,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F24",
+      "name": "缺口解释不新增付款",
+      "message": "请解释2026-11-04的预计资金缺口500元，结合已知付款提出调整建议。先只解释，不新增付款，也不修改或执行安排。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1426,
+      "expected": "check(s,b){same(candidate(s),b);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "1ed82021-9fa5-453f-aa17-d512a350a27b",
+            "title": "电脑",
+            "cents": 100000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "ac87b894-d9a2-48e4-9497-24e53a98996f",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F25",
+      "name": "只取消一个目标预留",
+      "message": "不买电脑了，把电脑预留去掉。生活费、房租和理财都保持原来那样。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 903,
+      "expected": "check(s,b){eq(candidate(s).earmarks.length,0);same(candidate(s).transfers,b.transfers);eq(candidate(s).reserve,b.reserve);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [],
+        "transfers": [
+          {
+            "id": "942901f6-4eef-43ce-b16f-9db69773000f",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    },
+    {
+      "id": "F26",
+      "name": "追加第二个目标不覆盖原目标",
+      "message": "再额外留500元旅游，原电脑预留1000元不变，其他也不变。",
+      "passed": true,
+      "mode": "model",
+      "calls": 1,
+      "elapsedMs": 1272,
+      "expected": "check(s,b){eq(candidate(s).earmarks.length,2);assert.ok(candidate(s).earmarks.some(x=>x.id===b.earmarks[0].id&&x.cents===100000));eq(candidate(s).earmarks.reduce((n,x)=>n+x.cents,0),150000);same(candidate(s).transfers,b.transfers);}",
+      "observed": {
+        "title": "我的资金安排",
+        "reserve": 200000,
+        "earmarks": [
+          {
+            "id": "5f56874f-0dc7-41cb-81af-5827dbfd72aa",
+            "title": "电脑",
+            "cents": 100000
+          },
+          {
+            "id": "4cdfca50-b781-4d08-8505-0a047c0b5499",
+            "title": "旅游",
+            "cents": 50000
+          }
+        ],
+        "transfers": [
+          {
+            "id": "f80655bb-ef92-492c-97df-6660b9db50a3",
+            "title": "房租",
+            "cents": 300000,
+            "recipient": "lin",
+            "date": "2026-11-03",
+            "purpose": "expense",
+            "category": "居住"
+          }
+        ],
+        "invest": true,
+        "horizon": 90,
+        "investBudget": null,
+        "product": null
+      },
+      "preview": null
+    }
+  ]
+}
