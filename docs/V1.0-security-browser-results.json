@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "errors": [],
+  "checks": [
+    "external consent dialog precedes the first provider call",
+    "declining consent sends no model request and grants no consent",
+    "explicit consent enables one scoped provider call with durable usage accounting",
+    "global quota blocks additional provider HTTP traffic",
+    "resetting the demo cannot reset model usage quotas",
+    "account security exposes a working withdrawal control",
+    "withdrawal requires a new choice on mobile and the dialog fits the viewport"
+  ],
+  "passed": true
+}

@@ -1,0 +1,15 @@
+{
+  "errors": [],
+  "checks": [
+    "home deposit popup opens with an enabled confirmation button, even if full-account reads fail",
+    "manual confirmation of 1,000,000 yuan completes once; double click creates one receipt",
+    "cancel remains clickable and leaves the balance unchanged",
+    "standalone deposit page also enables confirmation and completes the one-cent boundary amount",
+    "lost committed response is reconciled with the original operation, without another deposit",
+    "request that never reaches the server releases the UI; explicit retry uses the same draft and credits once"
+  ],
+  "version": "1.0.0",
+  "orders": 4,
+  "duplicateCredits": 0,
+  "passed": true
+}

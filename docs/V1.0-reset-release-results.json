@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "revision": "demo-reset-20261102-r5",
+  "automatedTests": 355,
+  "browserChecks": 58,
+  "newAutomatedTests": 7,
+  "newBrowserChecks": 9,
+  "realModelRetest": false,
+  "deployment": {
+    "date": "2026-11-02",
+    "version": "1.0.0",
+    "revision": "demo-reset-20261102-r5",
+    "steps": [
+      "archive hash verified"
+    ],
+    "previousRelease": "/opt/finguard/releases/1.0.0-access-20261102-r4b",
+    "accountsBefore": 18,
+    "archiveSHA256": "6545b5a81977f970dc59552110b0b6dfc456a5a3b375ad753fa4d91350a000c2",
+    "health": {
+      "application": "FinGuard",
+      "version": "1.0.0",
+      "demoLogin": true,
+      "reviewDemo": true
+    },
+    "accountsAfter": 18,
+    "existingAccountIdentifiersPreserved": true,
+    "currentRelease": "/opt/finguard/releases/1.0.0-demo-reset-20261102-r5",
+    "existingCredentialsUnchangedByDeployment": true,
+    "runtimeHashesMatch": true,
+    "success": true
+  },
+  "public": {
+    "checkedAt": "2026-11-02T09:03:15.013Z",
+    "version": "1.0.0",
+    "httpsCertificateVerified": true,
+    "staticFilesMatchDeployedSnapshot": true,
+    "files": {
+      "/app.js": "0d1dd080768af3e47736e21e5fe1f605c048235e98bbb923b2d7d3cb63faa844",
+      "/banking.js": "9e56b5e4e2663a9d7348ff4617897a5572995cfd4a718480cd78ea1afb8541b1",
+      "/demo-reset.js": "590fc432010116fd9927b1338cdef4625e1976d4252010ad9677cb99181af0ab"
+    },
+    "readOnly": true
+  }
+}

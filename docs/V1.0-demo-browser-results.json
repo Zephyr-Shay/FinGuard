@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "errors": [],
+  "checks": [
+    "login page and health display V1.0 and expose only the explicitly provisioned simulation account",
+    "test-account fill action populates masked credentials without automatically submitting login",
+    "tester login reaches the normal isolated account home through the ordinary session flow",
+    "changing the demo password removes the shortcut instead of advertising stale credentials"
+  ],
+  "passed": true
+}

@@ -1,0 +1,458 @@
+✔ R02: insecure provisioning rejected; offline remediation preserves IDs and unrelated sessions (816.0428ms)
+✔ 账号：未登录不能读账单证据或执行，注册不开放 (339.1083ms)
+✔ 账号：登录Cookie保护、退出失效、服务器重启仍可登录 (398.1667ms)
+Request rejected: BUSINESS_ERROR 任务不存在
+✔ 账号：两人余额、任务、预算、聊天、重置和证据隔离 (512.0032ms)
+✔ 账号：错误密码、伪造Cookie和跨站登录被拒绝 (346.9918ms)
+✔ 账号：失败尝试限制和会话过期 (553.0926ms)
+Request rejected: BUSINESS_ERROR 任务不存在
+✔ V1.6 新增个人数据按账号隔离且重启保留，非法跨站不写入 (484.2301ms)
+✔ V1.7 修改密码检查旧密码、来源与账号，撤销所有旧会话而保留其他用户 (625.2433ms)
+Request rejected: BUSINESS_ERROR 头像选项无效
+✔ V1.7 昵称头像按账号隔离并持久保存，非法头像不保存 (441.8354ms)
+✔ V1.2 不同保留金额得到不同余量，历史消费不重复扣除 (2.8806ms)
+✔ V1.2 未提供预算不凭占比判断过多，少消费不要求花掉 (0.2752ms)
+✔ V1.2 连续追问沿用餐饮上下文并列明细 (0.2627ms)
+✔ V1.2 模型失败有明确本地回答，恶意模型输出不能执行 (1.2536ms)
+✔ V1.2 备注不发给模型，历史不提升为系统指令 (6.2443ms)
+✔ V1.2 偏好拒绝负数、伪造余额和无效分类 (0.2588ms)
+✔ V1.2 授权绑定 action (2.0299ms)
+✔ V1.2 授权绑定 target (0.5144ms)
+✔ V1.2 授权绑定 expiresAt (0.2962ms)
+✔ V1.2 直接调用执行函数不能绕过批准 (0.3874ms)
+✔ API01 首页与静态资源可由处理器返回，带内容安全策略 (50.9045ms)
+✔ API02 从计划到批准到持久化恢复的完整路径 (93.7029ms)
+✔ API03 客户端附加金额不能修改确认卡片 (68.2028ms)
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+✔ API04 外部Origin与伪造Host均不能写入 (49.752ms)
+✔ API05 超时结果落盘后恢复仍只有一笔交易 (90.3395ms)
+Request rejected: BUSINESS_ERROR 请输入1至600字的问题；分析接口不接受操作参数
+✔ API06 未确认的重置拒绝；确认重置恢复样例 (79.105ms)
+✔ API07 证据下载有文件名且不含授权token (61.3984ms)
+FinGuard login failure: LOGIN_STATE
+Request rejected: BUSINESS_ERROR 请填写核对依据或处理结果，不能直接认定已解决
+✔ API08 结构错误、未知路由和过长输入返回可处理错误 (58.4574ms)
+✔ API09 同时重复批准也只写入一笔订单 (101.2324ms)
+Request rejected: BUSINESS_ERROR 请核对异常记录与标记类型
+✔ V1.2 API 分析可追问但不能执行模型给出的操作 (95.2569ms)
+Request rejected: BUSINESS_ERROR 请核对异常记录与标记类型
+Request rejected: BUSINESS_ERROR 说明最多500字
+✔ V1.2 API 分析偏好不改变余额，跨站不能修改 (85.6643ms)
+✔ V1.2 API 分析期间预算变化，过期回答不能保存 (74.0127ms)
+✔ 登录回调页显示安全错误编号，不回显授权码 (48.162ms)
+✔ V1.4 核对结果须有依据；历史追加且不改变余额或交易 (87.972ms)
+✔ V1.4 核对拒绝假ID、非法状态与过长备注 (49.6974ms)
+✔ V1.5 API 追问历史传给规划器，信息完整后仍等批准 (80.3633ms)
+✔ 整份计划须有效授权，重复确认和时钟不重复扣款 (3.1693ms)
+✔ 定时授权跨重启保存；未到期不执行，到期执行一次 (0.4622ms)
+✔ 条件不满足暂停，不自动恢复；取消阻止后续执行 (6.4763ms)
+✔ 已过日期、过期批准、跨账号ID及计划变更拒绝 (0.2786ms)
+✔ 授权后收款人尾号变化使计划失效 (0.2306ms)
+✔ 错过执行日不追扣，暂停；不会自动挪到月底 (0.2595ms)
+✔ 卡片锁定同时拦截新版和旧转账路径 (1.9079ms)
+✔ 低风险不能购买高风险；赎回延迟到账且重复时钟无重复入账 (0.5595ms)
+✔ AA分摊精确到分、报告只统计已有数据、周期识别去重月份 (0.7992ms)
+✔ 累计超额计划可生成但须服务器强验证，证据不泄露凭证 (0.5537ms)
+Request rejected: BUSINESS_ERROR 预算或保留金额需要你决定，请重新核对提示并勾选仅本次继续。
+Request rejected: BUSINESS_ERROR 预算或保留金额需要你决定，请重新核对提示并勾选仅本次继续。
+Request rejected: BUSINESS_ERROR 不能修改已生成计划
+✔ HTTP overspend/reserve consent is required before payment verification and cannot be forged or replaced by model fields (165.6887ms)
+Request rejected: BUSINESS_ERROR 预算或保留金额需要你决定，请重新核对提示并勾选仅本次继续。
+✔ legacy assistant transfer uses the same review, purpose and one-operation consent (120.6472ms)
+Request rejected: BUSINESS_ERROR 预算或保留金额需要你决定，请重新核对提示并勾选仅本次继续。
+Request rejected: BUSINESS_ERROR 只能修改统计用途
+✔ a changed balance/budget or transfer use cannot reuse old warning consent or authorization (124.0683ms)
+Request rejected: BUSINESS_ERROR 验证期间账户或计划已变化，请重新核对
+✔ budget data changing during PIN/MFA verification cannot authorize a stale choice (110.8985ms)
+Request rejected: BUSINESS_ERROR 预算或保留金额需要你决定，请重新核对提示并勾选仅本次继续。
+Request rejected: BUSINESS_ERROR 这笔转账不属于当前账户，或尚未执行
+Request rejected: BUSINESS_ERROR 消费付款需要选择有效消费分类
+✔ classification preview and commit adjust budgeting only, preserve the receipt and require their own consent (153.7571ms)
+✔ live budget tracking is account state, independent of the frozen sample analysis range (104.1354ms)
+✔ spending, account movements and investment principal stay distinct; linked expenses and imported accounts are not double counted (1.5833ms)
+✔ 80% warns; exactly the budget does not require an exception; excess and category excess are explicit choices (2.1474ms)
+✔ one-operation consent can cross the reserve without changing settings; no consent cannot execute (1.3281ms)
+✔ consent is bound to the transaction and actual budget state, and classification change requires a fresh review (0.5771ms)
+✔ expense payment is counted once only after execution; a repeated approval does not add spending (0.446ms)
+✔ card status, card limit and insufficient funds remain enforced even with a valid budget decision (0.6581ms)
+✔ scheduled consumer payments are forecast once; worse impact pauses and explicit re-review creates a new authorization (0.9827ms)
+✔ missed scheduled dates are not silently changed to today when re-reviewing (0.3494ms)
+✔ historical transfer classification changes statistics, never the original receipt or balance, and leaves dates (0.7924ms)
+✔ AI expense recording warns before saving and can link an executed payment instead of counting it twice (3.3095ms)
+✔ AI reserve exceptions require a separate preview choice and then a separate final authorization (3.3716ms)
+Request rejected: BUSINESS_ERROR 分类预算合计必须等于总预算减去保留金额，请先配平
+✔ one balanced monthly allocation persists an exact sum; consumption and wealth use the net allowance once (2.5083ms)
+✔ mismatched amounts, negative or overlarge reserve and inconsistent caller cap are rejected atomically (2.5007ms)
+✔ zero allocation is a real zero allowance and category zero cannot disable a warning (1.0663ms)
+✔ legacy independent budget is preserved until the user explicitly saves the balanced editor (0.2875ms)
+✔ HTTP cannot save a false sum; rejection leaves budget, balance and history unchanged and valid allocation survives reload (95.3446ms)
+✔ Default limit is five million yuan; users can choose arbitrary cent-exact limits up to ten million (3.1147ms)
+✔ Legacy untouched default upgrades once with timestamp, preserving balance, paused plans and all records (0.2603ms)
+✔ Migration preserves user-set low/large limits, including an explicitly chosen old default (0.1455ms)
+✔ Million-yuan transfer works only under current personal limit and balance; still requires strong verification (1.9197ms)
+✔ Default migration is persisted at startup and does not overwrite customized values across restart (71.6443ms)
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+✔ HTTP raising the limit or transferring millions cannot bypass PIN and MFA; custom setting persists (478.4162ms)
+✔ GPT 身份签名、issuer、audience、nonce、过期与篡改验证 (5.8448ms)
+✔ GPT 只接受 completed，拒绝中断和流内额度错误 (14.9266ms)
+✔ GPT 跨数据块 UTF8 与 SSE 解析 (1.3475ms)
+✔ 追问信息不产生授权、订单或资金变化 (2.0664ms)
+✔ 完整模拟 OAuth、模型列表和调用；状态不暴露 token (8.3966ms)
+✔ 登录修复：第二次登录不覆盖第一条请求，旧回调不可重放 (2.8734ms)
+✔ 登录修复：过期与取消授权分别报告，不发起交换 (1.6491ms)
+✔ 登录修复：网络错误不暴露原始URL和凭据 (1.5467ms)
+✔ 登录修复：HTML中间页不再成为模糊JSON错误 (1.6201ms)
+✔ 登录修复：失效授权码提供重新登录提示 (1.6118ms)
+✔ 登录修复：交换期间断开连接，回调不能恢复会话 (2.2256ms)
+Wealth reply validation/service failed: 回答不能声称未核对的执行结果
+✔ explanatory questions use saved goal, context and prior preview without erasing it or asking for the same fields (7.2955ms)
+✔ educational questions before any budget get a direct answer and do not manufacture investment intent (0.6333ms)
+✔ ambiguous amount is clarified without guessing; explicit correction invalidates the old preview (1.6278ms)
+✔ model cannot change risk or execution authority through either answer or patch; fallback is labelled (1.4696ms)
+✔ pending plan can be explained but its amounts cannot be silently replaced through chat (2.2494ms)
+✔ verification explanation is allowed but secret values do not reach the model (1.0055ms)
+✔ semantic wealth handoff can route a sentence without fund keywords without creating a payment task (64.6514ms)
+✔ explicitly removing a product preference does not erase the budget or silently change risk (1.6612ms)
+✔ explicit Chinese reserve is not lost when the model describes it but omits the patch, and adjacent assistant notes are coalesced (1.0664ms)
+✔ explanation may discuss allocation proportions and explicitly denied success without treating either as a yield or execution claim (0.718ms)
+✔ already executed simulated purchase can be explained from the verified receipt without executing it again (1.6506ms)
+✔ reserve explanation uses exact server arithmetic even if the language model invents a budget component (0.7552ms)
+✔ 01 正常转账只在批准后改变余额，并核对回执 (3.5116ms)
+✔ 02 重名收款人先澄清，不能跳过选择 (0.564ms)
+✔ 03 账单分类合计与固定人工核对值相符 (0.6687ms)
+✔ 04 重复扣费能定位两笔原始明细 (0.1997ms)
+✔ 05 订阅列表含历史扣费来源且不执行变更 (0.4711ms)
+✔ 06 取消代扣经确认后改变状态 (0.4455ms)
+✔ 07 否决后无法再次批准，无账目变动 (0.2684ms)
+✔ 08 缺少或伪造授权凭证均不能执行 (0.2423ms)
+✔ 09 超过默认单笔500万元限额暂不执行 (0.2122ms)
+✔ 10 执行前余额变化会重新检查 (0.3472ms)
+✔ 11 过期授权不再执行 (0.2536ms)
+✔ 12 服务端参数变化使授权失效 (0.2161ms)
+✔ 13 账单恶意备注仅作为数据，不转账 (0.4407ms)
+✔ 14 非白名单模型动作被拦截 (0.1486ms)
+✔ 15 重复批准同一任务只执行一次 (0.321ms)
+✔ 16 成功后丢失响应，核对不再次扣款 (0.3651ms)
+✔ 17 执行前超时，核对后重新授权再执行 (0.4516ms)
+✔ 18 重启恢复待核对任务，原订单只有一笔 (0.4534ms)
+✔ 19 删除部分样例不编造缺失明细或金额 (0.1537ms)
+✔ 20 金额以分计算，0.29元精确扣除29分 (1.012ms)
+✔ 21 非法金额、负数与多余小数不能通过 (1.0482ms)
+✔ 22 条件、定时与否定指令不立即转账 (0.0694ms)
+✔ 23 两个独立取消任务执行前会复核订阅状态 (0.2964ms)
+✔ 24 导出证据不包含执行授权凭证 (0.2556ms)
+✔ 25 不完整解析千分位与科学记数法金额 (0.082ms)
+✔ 亲属口语先追问，不当作安全攻击且不执行 (0.224ms)
+✔ explicit tester provisioning is idempotent, salted and does not weaken regular password creation (105.7567ms)
+✔ demo helper cannot overwrite an existing tester identity or its strong password (132.5828ms)
+✔ changed demo credentials invalidate the public hint without being reset by re-provisioning (220.7759ms)
+✔ HTTP demo login uses normal sessions, keeps accounts isolated and exposes no account-creation route (225.6886ms)
+✔ demo CLI requires its explicit opt-in before touching a data directory (52.8452ms)
+Request rejected: BUSINESS_ERROR 登录密码不正确
+Request rejected: BUSINESS_ERROR 登录密码不正确
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+✔ Demo reset requires current identity proof; wrong or missing factors leave state and credentials intact (347.4565ms)
+✔ Verified reset atomically clears PIN, MFA and unfinished enrollment; rotates all sessions and preserves other users (433.5239ms)
+Request rejected: BUSINESS_ERROR 请先到卡片与安全设置支付密码
+✔ Reset disables password-free grants and trusted payees while retaining cumulative security totals (352.0374ms)
+✔ User without a bound verifier can reset using login password, then set a fresh PIN and bind a new verifier (383.0431ms)
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 身份核验尝试过多，请15分钟后重试
+✔ Reset cannot unlink an existing verifier using only a logged-in session; invalid identity attempts are limited (399.8739ms)
+✔ Prepared reset rejects stale sessions or changed security state before any deletion (336.541ms)
+Request rejected: EEXIST EEXIST: file already exists, mkdir 'C:\Users\XieZe\Desktop\agent x eco\FINGUARD\FinGuard-prototype\.test-data\demo-reset-Clet9A\users\c89281d6-e605-4bb0-ae6f-b87cca854fac\archives'
+✔ Credential and session deletion rolls back if reset state persistence fails (260.8982ms)
+✔ deposit preparation returns current approval metadata without crediting any money; explicit approval credits once (247.2448ms)
+Request rejected: BUSINESS_ERROR 请输入6位支付密码
+✔ deposit preparation keeps a real PIN requirement when waiver is off, including the one-cent boundary (261.4713ms)
+✔ Composition reconciles cents and categories, includes only actual expenses; transfers, refunds, investments and invalid values excluded (1.4011ms)
+✔ Other preserves every original category and correct totals; color identity survives ordering and filtering (0.3734ms)
+✔ Empty and one-category days are honest; chart HTML escapes labels and provides keyboard-accessible marks with visible values (15.3352ms)
+✔ Daily/account boundaries and linked manual duplicates stay consistent with ledger source (2.1976ms)
+✔ Sample chart total matches independent fixed bill total and category shares are a whole (0.3241ms)
+Request rejected: BUSINESS_ERROR 上一条开销说明仍在整理，请稍候
+Request rejected: BUSINESS_ERROR 对话已变化，请重新载入
+Request rejected: BUSINESS_ERROR 记账请求格式不正确
+✔ Conversation collects missing amount then previews exact cents, does not write until confirmed; retries save only once (4.9254ms)
+✔ Chinese amount/date and corrections keep a single record; future expenses remain planned and excluded from actual ledger (1.4528ms)
+✔ Duplicate matching requires explicit choice; linking keeps original bill counted once (0.9501ms)
+✔ Stale edited record, forged payload/token, expired approval and missing fields do not write (0.7564ms)
+✔ AI output can only supply validated expense fields; failures visibly fall back, and credentials never reach the model (0.6665ms)
+✔ HTTP confirmation only accepts server draft; concurrent replies and reset/new-conversation races reject stale model output (92.802ms)
+✔ Payment PIN helper always exposes an inline forgotten-password action; omitted PIN does not display irrelevant action (0.2284ms)
+Request rejected: BUSINESS_ERROR 请明确确认保存或删除偏好
+Request rejected: BUSINESS_ERROR 资金安排请求格式不正确
+Request rejected: BUSINESS_ERROR 参考金额已变化，请刷新后核对
+✔ Preference and observation HTTP endpoints persist confirmed choices and isolate accounts (289.8126ms)
+✔ Unified preview conserves funds across payment, living reserve and earmarks without executing (5.0008ms)
+✔ Questions fill missing recipient, date, amount and reserve before a plan can exist (1.0435ms)
+✔ Local rules understand the canonical multi-goal sentence and explicit reserve changes (1.261ms)
+✔ Explanation-only response keeps the original preview; explicit changes invalidate it and preserve comparison (1.5627ms)
+✔ Known future debits are counted once and retained on a date-based balance path (6.8224ms)
+✔ Insufficient balance, overly large requested investment, stale dates and invalid money cannot draft (1.7099ms)
+✔ Risk quiz remains independent and short investment horizons cannot select unsuitable products (1.1082ms)
+✔ AI allocation is validated against the cashflow remainder and permitted product catalog (1.3548ms)
+✔ Draft is idempotent, remains unexecuted, and changing the account afterward invalidates approval (0.9853ms)
+✔ Explicit replacement cancels old unfinished work only after a valid new draft exists (2.6415ms)
+✔ Already executed payment cannot be changed or replayed; remaining work can be replanned (3.5241ms)
+✔ Completed investment stays as holdings when revising future payments, with no repeated purchase (1.8175ms)
+✔ Credential-shaped messages are rejected without sending them to the model (0.1929ms)
+✔ Concurrent account changes during model planning cannot overwrite state or preserve stale authorization (0.4144ms)
+Request rejected: BUSINESS_ERROR 资金安排已变化，请重新载入
+Request rejected: BUSINESS_ERROR 资金安排请求格式不正确
+Request rejected: BUSINESS_ERROR 请输入6位支付密码
+Request rejected: BUSINESS_ERROR 这份资金安排记录不存在
+✔ Identity, revision, strict request shape and real payment verification hold across the HTTP flow (408.8447ms)
+✔ Canonical and multi-goal routing is distinct from a simple transfer or isolated fund question (0.2636ms)
+✔ Choosing a known recipient resolves only the named incomplete payment without duplicating it (0.803ms)
+✔ Earmark-only saving records the plan without creating a money transaction or claiming a savings deposit (0.6597ms)
+✔ Expired preview and new future expenses require a fresh preview before drafting (0.8598ms)
+✔ Invalid replacement cannot cancel an existing authorized mandate (1.595ms)
+✔ Editing a completed payment is rejected and its receipt stays unchanged (1.2455ms)
+✔ Progress distinguishes collection, preview and an unverified draft (7.2106ms)
+✔ Mixed completion uses one real receipt and leaves future payment scheduled (9.1431ms)
+✔ At maturity successful receipt changes progress to completed without replay (1.9556ms)
+✔ Done status alone without a receipt never claims success (1.1304ms)
+✔ Expired confirmation and due waiting step are shown as requiring review (1.072ms)
+✔ Cancellation retains executed receipt and dates, collapsing only unfinished canceled work (1.1901ms)
+✔ Revising a linked goal keeps editing status through a subsequent explanation (1.8957ms)
+✔ Paused status and original reason are visible, with no fabricated receipt (0.8938ms)
+✔ No preference is inferred merely from conversation; saving needs explicit confirmation (0.6663ms)
+✔ Saving and reusing a preference preserves bank floor, funds and other goal details (0.8325ms)
+✔ Zero is a valid explicit reserve preference, and deletion removes the reusable value (0.3372ms)
+✔ Stale preferences and forged reference amounts cannot overwrite current choices (0.3248ms)
+✔ Account reserve can be chosen explicitly and changing requirements invalidates old preview (0.8167ms)
+✔ Preference records belong solely to their account state (0.3372ms)
+✔ Cashflow groups same-day costs and shows the first date crossing the floor (0.4482ms)
+✔ Cashflow distinguishes negative projected balance from a soft reserve gap (0.1661ms)
+✔ Unconfirmed drafts and historical expenses never reduce current cashflow again (0.7665ms)
+✔ Only authorized waiting transfers and the next active debit enter the observation window (0.717ms)
+✔ Same date and amount are flagged for review without silently deduplicating records (0.1741ms)
+✔ Preference does not become a cashflow floor, and alerts update when a mandate is canceled (1.0968ms)
+✔ Explicit explanation remains read-only even when the model suggests a patch (0.62ms)
+✔ 操作日志：成功失败均有开始结束时间，按账号隔离，绝不存密码或响应密钥 (2.423ms)
+✔ 预约：创建、确认、执行、暂停与取消有真实时间；重复取消不重写时间 (2.1994ms)
+✔ 删除手工账单保留原金额、发生日期及操作时间；修改保留原创建时间 (1.0347ms)
+✔ AI元分误读自动纠正一次；提示包含可核对的元分金额，仍拒绝持续越界 (1.0605ms)
+✔ 业务接口在模型编造金额或误路由多步计划时保持追问，无确认凭证与订单 (137.6224ms)
+Request rejected: AI_PLAN_INVALID INTERNAL_FIXTURE_DETAIL
+Request rejected: AI_REPLY_INCOMPLETE INTERNAL_FIXTURE_DETAIL
+✔ 追问会话可接续用户的金额，已结束任务中的旧金额不能补入新需求 (106.1418ms)
+Request rejected: AI_SERVICE_TIMEOUT INTERNAL_FIXTURE_DETAIL
+Request rejected: AI_SERVICE_UNAVAILABLE INTERNAL_FIXTURE_DETAIL
+✔ 业务接口返回明确错误码与恢复提示：AI_PLAN_INVALID (47.9124ms)
+Request rejected: AI_BUSY INTERNAL_FIXTURE_DETAIL
+✔ 业务接口返回明确错误码与恢复提示：AI_REPLY_INCOMPLETE (51.8301ms)
+✔ 业务接口返回明确错误码与恢复提示：AI_SERVICE_TIMEOUT (57.4036ms)
+✔ 业务接口返回明确错误码与恢复提示：AI_SERVICE_UNAVAILABLE (60.018ms)
+✔ 业务接口返回明确错误码与恢复提示：AI_BUSY (54.853ms)
+✔ 多步接口拒绝金额对调、复用与漏项，不创建业务计划或确认凭证 (198.5766ms)
+✔ 多步接口接受正确的逐笔重排，但仍停在待确认且不写交易 (71.0832ms)
+✔ 含糊或缺少金额不采用编造金额：给林晓转账，金额你看着办 (3.0138ms)
+✔ 含糊或缺少金额不采用编造金额：随便给林晓转点钱 (0.3335ms)
+✔ 含糊或缺少金额不采用编造金额：给林晓转一些钱过去 (0.2556ms)
+✔ 含糊或缺少金额不采用编造金额：给林晓转几百块 (0.2468ms)
+✔ 含糊或缺少金额不采用编造金额：给林晓转三千左右 (0.2346ms)
+✔ 含糊或缺少金额不采用编造金额：给林晓转账 (0.7937ms)
+✔ 具体中文、阿拉伯数字、小数与万元金额可核实，号码和日期不充当金额 (3.4542ms)
+✔ 金额不一致、示例金额、多个金额或区间均不能生成确认凭证 (0.6821ms)
+✔ 待补充对话只使用用户金额，含糊的新金额覆盖旧金额 (1.3702ms)
+✔ 普通聊天及只读查询不追问金额，未知动作仍不能取得凭证 (0.3243ms)
+✔ 多步转账也检查模型金额，日期不导致误判 (0.2577ms)
+✔ 本地模式缺金额也继续追问，重名选择方法保持原流程 (0.7988ms)
+✔ manual order amounts preserve cents and reject invalid or excessive values (0.7548ms)
+✔ manual purchase cannot ignore available funds, card state or transaction limits (11.754ms)
+✔ manual purchase respects minimums and risk validity without requiring an AI plan (0.2413ms)
+✔ redemption is limited to current held principal and does not require a new purchase risk grade (0.1673ms)
+✔ month filtering rejects partial years and invalid months, while an empty value clears the date filter (0.6323ms)
+✔ day filtering validates real calendar dates including leap years (1.0017ms)
+✔ date filters reject untrusted and unsupported values without evaluating them (0.109ms)
+✔ Ledger includes new successful movements, separates imports, excludes unexecuted redemptions and linked manual duplicates (3.0009ms)
+✔ Ledger ordering is stable, exact by cents/time/category, never mutates original rows (8.3609ms)
+✔ quotes validate price, percent and source time; missing indices stay missing (0.8282ms)
+✔ single flight cache, retained snapshot, stale fallback and expiry (15.3348ms)
+✔ analysis is read only and bound to server snapshot; no AI config gives labeled summary (0.4581ms)
+✔ page entry refresh bypasses minute cache with five-second burst coalescing (0.4448ms)
+✔ R07: external transport requires consent and a live authenticated model context before any network call (4.6422ms)
+✔ R04: retries reserve independently, and exhausted global request quota blocks the next HTTP attempt (1.3064ms)
+✔ R04: failed transport retains its token reservation; unknown or duplicate settlements cannot refund quota (1.0134ms)
+✔ R04: daily quotas survive restart, use Beijing midnight, and global limit includes different accounts (74.7764ms)
+✔ R04: user and global token reservations roll back together when either quota is exceeded (0.8818ms)
+✔ R07: withdrawal while an external response is pending discards the response instead of applying it (1.0604ms)
+✔ R07: outgoing context filters credential fields and common identifiers while retaining relevant financial amounts (0.2511ms)
+✔ 结构化调用仅在已知DeepSeek非思考接口使用低温度，解释调用保持默认 (1.6584ms)
+✔ 截断回复、上游异常与超时返回稳定错误码，JSON重试仍保持结构化参数 (1.6016ms)
+✔ Forgotten PIN recovery works despite PIN lock, revokes old PIN and other sessions, preserves balance/MFA and dated audit (685.3616ms)
+✔ Preview grants no authority; wrong password, missing OTP, replay and invalid new PIN cannot reset (649.172ms)
+✔ Final recovery/MFA limits survive rolled back OTP failures and successful preview does not reset them (862.7751ms)
+✔ Recovery password preview has its own login guessing limit, distinct from payment PIN lock (497.9033ms)
+✔ Recovery requires current account, same origin, strict payload, existing PIN and already-bound MFA (689.8588ms)
+✔ Concurrent recovery consumes OTP at most once and clears unfinished MFA rotation (348.7577ms)
+Request rejected: BUSINESS_ERROR 账号安全状态已变化，请重新验证
+✔ Reset invalidates an in-flight previously-verified PIN-only transfer before the money commit (354.7746ms)
+Request rejected: BUSINESS_ERROR 请先到卡片与安全设置支付密码
+Request rejected: BUSINESS_ERROR 支付密码不正确
+Request rejected: BUSINESS_ERROR 请输入6位支付密码
+✔ Payment required on both approval routes; no missing/wrong PIN, mismatch identity, altered plan or replay can move extra funds (474.635ms)
+✔ Payment password requires verified demo reset, rate limits incorrect attempts, change requires both credentials and revokes old PIN (632.2721ms)
+Request rejected: BUSINESS_ERROR 核对选项不匹配
+✔ Anomaly preset records evidence without mandatory typing; forged combination rejected (152.7665ms)
+✔ V1.6 模拟转入须授权，重复批准不重复入账 (3.0778ms)
+✔ V1.6 转入响应丢失后核对不重复加钱 (0.4316ms)
+✔ V1.6 转入非法金额和来源不能执行 (0.3998ms)
+✔ V1.6 联系人编辑使旧确认失效，别名不得重用 (1.9266ms)
+✔ V1.6 日历计划不扣余额，关联账单不重复计数 (0.6125ms)
+✔ V1.6 手工消费与资金流水分开，非法日期被拒绝 (0.3584ms)
+✔ V1.6 预算与目标不改余额，允许超配草稿 (0.652ms)
+✔ V1.6 问候和通讯录查询不进入待办，过期确认退出待办 (0.6717ms)
+✔ V1.6 本地多轮选择收款人后补金额，非法金额不截断 (0.6919ms)
+✔ V1.6 普通模型回答不请求授权，伪造联系人列表不被采用 (0.57ms)
+✔ V1.6 旧版追问链迁移只关闭有后续证据的待补充事项 (0.3658ms)
+✔ 模型01 合法结构化计划进入模型模式，输入不含账单 (5.3466ms)
+✔ 模型02 无效JSON停止，不自动降级执行 (1.6114ms)
+✔ 模型03 服务错误向调用者返回失败 (0.9409ms)
+✔ 模型04 非本机明文HTTP配置被拒绝 (0.8434ms)
+✔ 模型05 追问携带历史与联系人数据，不能自动批准 (1.1765ms)
+✔ 模型06 限流错误不泄露密钥 (0.8889ms)
+✔ 模型07 官方JSON空输出仅重试一次普通JSON提示，保留结构校验且禁用思考 (1.9089ms)
+✔ 模型08 被截断的JSON不能用于业务计划；重试仍失败则明确报错 (1.1392ms)
+✔ 逐笔配对拒绝对调、复用、漏项与加项，而非只比较金额是否出现 (2.8403ms)
+✔ 按收款人ID与金额比较，正确重排、别名与金额前置不被拦截 (0.7652ms)
+✔ 同一收款人多笔及重复金额保留逐笔数量约束 (0.4116ms)
+✔ 同名别名、总额分配和复杂分别语法不能猜测配对 (0.4179ms)
+✔ 单笔对象同样必须对应用户点名的已有收款人 (0.4613ms)
+✔ 补充姓名、最终金额与修改对象沿用同一待补充会话，不相加 (0.4656ms)
+✔ 助手示例、多个历史对象和尚未指明的家人不能补入配对 (0.399ms)
+✔ 追加与减少均追问最终总额，既不接受自动求和也不把增量当总额 (0.1089ms)
+✔ 配对守卫不修改候选和账户资料，拒绝时不生成凭证或订单 (2.0667ms)
+✔ unique full names take precedence over shared or colliding aliases (1.0105ms)
+✔ unnecessary model clarification becomes only a correctly grounded pending candidate (2.2461ms)
+✔ shared aliases still clarify; corrections, dates, conditions, negations and questions are never converted (0.3207ms)
+✔ engine uses the same full-name correction and still never transfers without confirmation (2.2489ms)
+✔ ordinary writes and reads have finite deadlines while model generation has a separate budget (0.7151ms)
+✔ hung write is aborted once and never automatically retried (28.6623ms)
+✔ deadline also bounds a response whose headers arrive but JSON body stalls (15.6681ms)
+✔ transport forwards identity and preserves HTTP failure instead of claiming success (1.048ms)
+✔ eligible password-free transfer needs no PIN or OTP and shows the actual remaining daily allowance (13.9145ms)
+✔ enabled waiver still explains a new payee, daily allowance or unresolved operation (0.8864ms)
+✔ usage counts all recipients, reservations and archived totals while excluding the current plan (0.377ms)
+✔ independent demo creation is opt-in and validates generated credentials (44.3515ms)
+✔ retry coalesces the same credentials; a different password cannot obtain its session (141.4153ms)
+✔ creation cannot claim an existing ordinary account or overwrite its payment credential (177.3695ms)
+✔ daily source/global quotas persist over restart, reset at Beijing midnight, and never delete accounts (148.4061ms)
+✔ creation has a bounded KDF concurrency and total account quota (50.8667ms)
+✔ racing requests with different passwords never coalesce into the winner session (114.1224ms)
+✔ HTTP onboarding enforces origin, keeps ordinary registration closed, and uses isolated normal sessions (269.2119ms)
+Request rejected: BUSINESS_ERROR 不能修改已生成计划
+✔ savings moves existing funds, conserves assets and produces one dated receipt even after retry (4.4227ms)
+✔ withdrawals cannot use another pot, exceed the saved amount or create money; invalid IDs and manual progress rejected (1.2458ms)
+Request rejected: BUSINESS_ERROR 预算或保留金额需要你决定，请重新核对提示并勾选仅本次继续。
+✔ insufficient funds, card loss, limits, missing strong verification and unchosen reserve exception cannot transfer (2.4641ms)
+✔ goal edits or pot changes invalidate older confirmations; cancelling and expiry never move funds (1.0742ms)
+Request rejected: BUSINESS_ERROR 验证期间账户或计划已变化，请重新核对
+✔ old handwritten progress is preserved separately, never credited; funded goals cannot be deleted and receipts survive deletion (0.8236ms)
+✔ savings are excluded from consumption budgets and available investment cash; the legacy plan binding format remains compatible (7.002ms)
+✔ HTTP staged verification does not move funds until final authorization, cannot change the amount, and persists balances (120.8804ms)
+✔ HTTP reserve choice happens before strong authentication and verification races cannot alter or lose savings (114.1727ms)
+✔ R01: in-flight old-password login cannot create a valid session after credential replacement (162.9788ms)
+✔ R03: successful shared-IP logins do not consume failure quota; changing IP cannot evade account throttling (2249.6324ms)
+✔ R03: forwarded-IP spoofing ignored unless the immediate proxy is trusted; malformed headers fail closed (3.3028ms)
+✔ R02: normal account APIs reject a long username used as its own password (96.4024ms)
+✔ TOTP matches all RFC6238 SHA1 vectors and rejects reuse/window errors (1.3191ms)
+✔ Enrollment requires password, session binding, confirmation; encrypted storage, no replay, rotation cannot bypass old factor (389.3208ms)
+✔ Policy combines all recipients, entry paths and future mandates, counts whole plan, changed target loses trust (1.1295ms)
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 小额日累计额度须为1至1000元（本演示设置范围）
+Request rejected: BUSINESS_ERROR 请输入6位支付密码
+Request rejected: BUSINESS_ERROR 请先到卡片与安全设置支付密码
+✔ Strong verification enforced on both routes; yellow simplification cannot cross daily threshold or survive reset bypass (561.5348ms)
+✔ Scheduled yellow authorization pauses when execution-day cumulative total now requires MFA (0.8252ms)
+✔ CSV preview validates quoting, cents, dates and direction; import deduplicates idempotently without balance effects (1.1993ms)
+Request rejected: BUSINESS_ERROR 只能确认服务端预览
+✔ HTTP imports are account-local; commit rejects edited preview and lost-response recovery checks receipt without reexecution (311.8077ms)
+Request rejected: BUSINESS_ERROR 另一笔操作正在验证，请稍后核对结果
+Request rejected: BUSINESS_ERROR 验证期间账户或计划已变化，请重新核对
+✔ Concurrent approval is serialized and any state mutation during authentication invalidates approval (79.1447ms)
+✔ User-defined limits persist and constrain pending transfers; recovery preserves prior lock and rejects stale lost mandates (1.346ms)
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+✔ HTTP recovery and arbitrary personal limits require strong verification and cannot raise the simplified threshold (481.274ms)
+Request rejected: BUSINESS_ERROR 支付密码不正确
+Request rejected: BUSINESS_ERROR 转账信息已变化或过期，请重新核对
+Request rejected: BUSINESS_ERROR 只能验证当前转账的支付密码
+Request rejected: BUSINESS_ERROR 转账信息已变化或过期，请重新核对
+Request rejected: BUSINESS_ERROR 请输入手机验证器的6位动态验证码
+Request rejected: BUSINESS_ERROR 转账信息已变化或过期，请重新核对
+✔ Transfer PIN stage validates only this account and mandate, never authorizes or moves money; final still requires MFA (526.1046ms)
+Request rejected: BUSINESS_ERROR 转账信息已变化或过期，请重新核对
+Request rejected: BUSINESS_ERROR 转账信息已变化或过期，请重新核对
+Request rejected: BUSINESS_ERROR 转账信息已变化或过期，请重新核对
+✔ PIN precheck rejects cancelled, expired and non-transfer mandates (241.582ms)
+Request rejected: BUSINESS_ERROR 转账信息已变化或过期，请重新核对
+✔ Account reset during asynchronous PIN precheck invalidates result without granting authorization (74.0995ms)
+✔ R05: failure while saving the audit entry rolls back balance, orders, receipts and revision together (45.5004ms)
+✔ R05: independent store instances cannot overwrite a newer transaction or execute a stale action (62.9075ms)
+✔ R05: legacy JSON migrates once without altering its bytes; later changes to the legacy file cannot replace committed state (55.8175ms)
+✔ R05: a corrupt legacy file is rejected and never silently replaced by a new demo account (35.0678ms)
+✔ R05: killing a process inside a transaction leaves the last complete balance/order/receipt state recoverable (117.3301ms)
+✔ R06: altered or deleted state cannot pass integrity checks or silently initialize a replacement account (116.9116ms)
+✔ R06: edits, middle deletion and tail deletion in the audit chain are detected (136.8229ms)
+✔ every imported public JS module is anonymously loadable, while account and payment APIs remain private (148.6929ms)
+✔ 登录后的页面显示退出入口而不显示个人GPT连接 (20.7127ms)
+✔ small-payment amounts parse decimal digits exactly and reject invalid or out-of-range input (0.7458ms)
+Request rejected: BUSINESS_ERROR 请输入6位支付密码
+✔ same draft rechecks latest waiver without PIN, and closing waiver restores PIN before any new debit (357.1361ms)
+✔ one-operation lookup is private, account-local and read-only before and after a completed transfer (348.8212ms)
+✔ assistant task lookup reflects waiver switches and cumulative threshold shared with direct transfer (331.6004ms)
+Request rejected: BUSINESS_ERROR 理财助手请求格式不正确
+Request rejected: BUSINESS_ERROR 理财助手请求格式不正确
+Request rejected: BUSINESS_ERROR 支付验证不可用
+✔ HTTP assistant accepts only conversation identifiers and never client allocations, tokens or credentials (144.9152ms)
+Request rejected: BUSINESS_ERROR 理财对话已变化，请重新载入
+✔ HTTP rejects concurrent replies and stale model responses after a new conversation or changed cashflow (78.4594ms)
+Request rejected: BUSINESS_ERROR 对话记录不存在
+✔ account isolation covers conversation, archive and fund API login checks (219.5416ms)
+Wealth reply validation/service failed: 理财需求包含不支持的信息
+✔ unspent current-month budget is reserved without deducting historical bills twice (1.0599ms)
+✔ unsupported return percentages, guarantees and execution claims cannot pass allocation validation (0.603ms)
+✔ cross-scenario reserve counts planned expenses, next debits and authorized transfers but not past bills or uncertain income (7.4819ms)
+✔ conversation collects missing requirements without writes or implicit risk changes; preview protects higher known reserve (4.0908ms)
+✔ model allocation is validated; preview/draft cannot execute and idempotent approval creates exact holdings and receipts (2.1639ms)
+✔ low risk and short-term money exclude gold; unmet conditions produce no-purchase preview instead of an invalid trade (0.5408ms)
+✔ cashflow changes invalidate both preview and the pending authorization; forged tokens and expired drafts cannot write (0.9643ms)
+✔ redemption conversation supports exact/all held amounts; confirmation remains separate and settlement is delayed once (1.0946ms)
+✔ read-only product comparison does not require payment/risk data or create transactions (0.6072ms)
+✔ credentials and injected safety instructions never reach model; model cannot write risk, funds or external operations (1.143ms)
+✔ outdated replies cannot overwrite a newer conversation and old token cannot confirm a modified preview (1.1915ms)
+✔ official fund parser rejects future/zero/malformed quotes and fund service coalesces/falls back with original dates (0.9554ms)
+Request rejected: BUSINESS_ERROR 只能选择服务端保存的方案
+Request rejected: BUSINESS_ERROR 支付验证不可用
+✔ wealth HTTP creates proposal and pending draft only; client alterations and missing payment rejected (106.5761ms)
+✔ wealth HTTP rejects model answer after risk update and coalesces concurrent request (88.9718ms)
+✔ 历史：修改与删除留痕，重置演示后事件仍可查，原始业务数据归档 (103.9063ms)
+✔ AI proposal never moves funds; draft is idempotent and approval preserves explicit reserve (4.2534ms)
+✔ malformed, invented, risky, duplicate and overspending AI output rejected (1.0437ms)
+✔ AI draft rejects stale account and expired proposal; no-purchase recommendation is allowed (0.6668ms)
+✔ buy rechecks lock/loss, current risk, current limit and reserved funds on execution (1.1054ms)
+✔ redemption receipt is not settlement; money returns once only after due time (0.406ms)
+ℹ tests 355
+ℹ suites 0
+ℹ pass 355
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30999.9699
+

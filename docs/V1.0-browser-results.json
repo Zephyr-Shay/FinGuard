@@ -1,0 +1,20 @@
+{
+  "errors": [],
+  "checks": [
+    "home pending work is above account balance",
+    "large card balance and top contextual pending entry, all pending interactions stay in dialogs",
+    "every reference fund has a direct purchase button without entering AI",
+    "insufficient purchase balance opens a contextual modal, preserves amount and creates no plan",
+    "manual purchase needs explicit reserve override, payment PIN and TOTP; double click buys once and references are folded",
+    "direct redemption does not require AI and clearly remains pending settlement",
+    "a fund above the current risk grade cannot be manually purchased; completing a new quiz updates the main page without buying",
+    "transfer validation also uses a modal and never discards the entered amount",
+    "390px mobile card page, product list and amount dialog fit the viewport",
+    "assistant-detected insufficient funds also opens a modal; technical operation IDs stay out of the main view"
+  ],
+  "manualModelPosts": 0,
+  "version": "1.0.0",
+  "modelCalls": 0,
+  "orders": 2,
+  "passed": true
+}

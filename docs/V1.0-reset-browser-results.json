@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "checks": [
+    "bill navigation reset explains security clearing and requires current login password and bound OTP",
+    "cancel leaves existing payment credentials and verifier unchanged",
+    "failed identity verification displays an error without resetting credentials",
+    "verified reset keeps user signed in on a rotated session and prompts security setup",
+    "old browser session cannot access the account after reset",
+    "old payment PIN and verifier cannot execute a sensitive operation after reset",
+    "setup button opens an in-place dialog; user sets a fresh PIN and binds a new independent verifier",
+    "banking navigation uses the same reset flow and shows first-time security setup after a second reset",
+    "reset and setup flows produced no uncaught browser errors"
+  ],
+  "errors": [],
+  "passed": true
+}
