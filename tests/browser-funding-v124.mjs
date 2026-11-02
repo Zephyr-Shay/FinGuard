@@ -1,0 +1,38 @@
+import {chromium} from 'file:///C:/Users/XieZe/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+import {mkdirSync,mkdtempSync,writeFileSync,rmSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import http from 'node:http';
+import assert from 'node:assert/strict';
+import {Accounts} from '../accounts.mjs';
+import {createHandler} from '../server.mjs';
+import {seed} from '../core.mjs';
+import {initBank,today} from '../banking.mjs';
+import {otp} from '../totp.mjs';
+const root=fileURLToPath(new URL('../',import.meta.url)).replace(/[/\\]$/,''),baseTime=Date.now();
+mkdirSync(root+'/.test-data',{recursive:true});const folder=mkdtempSync(root+'/.test-data/funding-ui-'),a=new Accounts(folder),secret='JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP';
+await a.create('funding_ui','Funding-UI-928!');const login=await a.login('funding_ui','Funding-UI-928!');await a.setPayment(login.token,{loginPassword:'Funding-UI-928!',newPin:'592748'});a.db.prepare('INSERT INTO mfa VALUES(?,?,?)').run(login.user.id,a.box.seal(secret,login.user.id),-1);
+const state=seed();state.balance=1000000;state.bills=[];state.subscriptions=[];initBank(state).risk={level:2,at:baseTime};mkdirSync(folder+'/users/'+login.user.id,{recursive:true});writeFileSync(folder+'/users/'+login.user.id+'/state.json',JSON.stringify(state));a.close();
+const model=async(prompt,messages)=>{
+ if(prompt.includes('你是FinGuard模拟理财方案助手')){const budget=Number(prompt.match(/本次预算只有[\d.]+元（(\d+)分）/)?.[1]);return JSON.stringify({summary:'房租按期安排，生活费和电脑目标留在余额中；余量比较模拟货币基金。',allocations:[{product:'fund_202301',cents:budget,reason:'符合已完成的风险测评与90天资金期限；不预测收益。'}]});}
+ const last=messages.at(-1).content;if(last.includes('改成2500'))return JSON.stringify({answer:'生活费已从2000元调整为2500元。付款和电脑目标保留，请重新计算方案。',patch:{reserve:250000}});
+ return JSON.stringify({answer:'已整理房租、生活费和电脑目标。请核对付款日期，余量会结合90天的用钱时间比较产品。',patch:{title:'下月房租与生活安排',reserve:200000,earmarks:[{title:'买电脑',cents:100000}],transfers:[{title:'房租',recipient:'lin',cents:300000,date:today(baseTime+5*86400000),purpose:'expense',category:'居住'}],invest:true,horizon:90}});
+};
+const server=http.createServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));const port=server.address().port,handler=createHandler({folder,port,scheduler:false,configured:()=>false,fundingModel:model});server.on('request',handler);let browser;
+try{
+ browser=await chromium.launch({channel:'msedge',headless:true});const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(12000);
+ await page.goto('http://127.0.0.1:'+port);await page.locator('#login-user').fill('funding_ui');await page.locator('#login-password').fill('Funding-UI-928!');await page.locator('#login-submit').click();await page.locator('[data-open-funding]').waitFor();
+ const snapshot=()=>page.evaluate(()=>fetch('/api/state').then(r=>r.json()));
+ await page.locator('#message').fill('下月5号给林晓转3000元房租，留2000元生活费，再预留1000元买电脑，剩下的钱理财，90天不用');await page.locator('#message-form .send').click();await page.locator('#funding-dialog .funding-turn.assistant').filter({hasText:'已整理房租'}).waitFor();
+ const geometries=await page.evaluate(()=>{const left=document.querySelector('.funding-facts').getBoundingClientRect(),right=document.querySelector('.funding-chat').getBoundingClientRect(),t=getComputedStyle(document.querySelector('.funding-turn.assistant p'));return {left:left.left,leftRight:left.right,right:right.left,rightWidth:right.width,font:parseFloat(t.fontSize),color:t.color};});assert.ok(geometries.leftRight<=geometries.right+1);assert.ok(geometries.rightWidth>350);assert.equal(geometries.color,'rgb(38, 62, 66)');assert.equal(geometries.font,16);
+ await page.locator('[data-funding-preview]').click();await page.locator('.funding-preview').waitFor();assert.match(await page.locator('.funding-preview').innerText(),/4,000\.00/);assert.equal((await snapshot()).orders.length,0);await page.locator('.funding-facts').evaluate(el=>el.scrollTop=0);
+ await page.screenshot({path:root+'/docs/V1.24-unified-desktop.png',fullPage:false});
+ await page.locator('#funding-message').fill('生活费改成2500元');await page.locator('#funding-dialog .send').click();await page.locator('.funding-diff').filter({hasText:'2,500.00'}).waitFor();assert.equal(await page.locator('.funding-preview').count(),0);
+ await page.locator('[data-funding-preview]').click();await page.locator('.funding-preview').waitFor();assert.match(await page.locator('.funding-comparison').innerText(),/4,000\.00 → ¥3,500\.00/);
+ await page.setViewportSize({width:390,height:844});await page.locator('#funding-message').fill('待发送的修改说明');await page.locator('[data-funding-tab=plan]').click();assert.equal(await page.locator('.funding-chat').isVisible(),false);assert.equal(await page.locator('.funding-facts').isVisible(),true);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:root+'/docs/V1.24-unified-mobile-plan.png',fullPage:false});
+ await page.locator('[data-funding-tab=chat]').click();assert.equal(await page.locator('#funding-message').inputValue(),'待发送的修改说明');assert.equal(await page.locator('#funding-dialog .send').isVisible(),true);await page.screenshot({path:root+'/docs/V1.24-unified-mobile-chat.png',fullPage:false});
+ await page.setViewportSize({width:1440,height:1000});await page.locator('#funding-message').fill('');await page.locator('[data-funding-draft]').click();await page.locator('#bank-approval').waitFor();assert.equal((await snapshot()).orders.length,0);
+ await page.locator('#bank-approval [data-consent]').check();await page.locator('#bank-approval #payment-pin').fill('592748');await page.locator('#bank-approval #verification-otp').fill(otp(secret));await page.locator('#bank-approval [data-approve]').click();await page.locator('#operation-result').waitFor();assert.match(await page.locator('#result-title').innerText(),/预约已设置/);assert.match(await page.locator('#operation-result').innerText(),/回执/);await page.screenshot({path:root+'/docs/V1.24-unified-receipt.png',fullPage:false});await page.locator('#result-done').click();
+ const after=await snapshot();assert.equal(after.balance,650000);assert.equal(after.orders.length,1);assert.equal(after.bankPlans[0].status,'scheduled');assert.equal(after.bankPlans[0].steps.filter((x,i)=>x.kind==='transfer'&&after.bankPlans[0].runs[i].status==='waiting').length,1);assert.equal(after.orders[0].params.cents,350000);assert.deepEqual(errors,[]);
+ writeFileSync(root+'/docs/V1.24-browser-results.json',JSON.stringify({checkedAt:new Date().toISOString(),model:'deterministic fixture; no external model requests',desktop:geometries,previewDoesNotMoveFunds:true,revisionComparison:true,mobileTabsPreserveDraft:true,noHorizontalOverflow:true,realPinAndTotp:true,mixedPlan:{futureTransfer:300000,executedBuy:350000,balance:after.balance,receipts:after.orders.length,status:after.bankPlans[0].status},errors},null,2));
+ console.log('V1.24 browser passed: unified routing, left/right layout, readable AI, revision comparison, mobile draft preservation, preview has no money movement, real PIN/TOTP, mixed future transfer plus one investment and result receipt.');
+}finally{await browser?.close();handler.close();server.closeAllConnections();await new Promise(r=>server.close(r));rmSync(folder,{recursive:true,force:true});}

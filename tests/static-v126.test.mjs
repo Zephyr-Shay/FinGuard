@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import http from 'node:http';import {mkdirSync,mkdtempSync,rmSync,readFileSync} from 'node:fs';import {createHandler} from '../server.mjs';
+test('every imported public JS module is anonymously loadable, while account and payment APIs remain private',async t=>{
+ mkdirSync('.test-data',{recursive:true});const folder=mkdtempSync('.test-data/public-module-'),server=http.createServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));const port=server.address().port,handler=createHandler({folder,port,scheduler:false,configured:()=>false});server.on('request',handler);t.after(async()=>{handler.close();await new Promise(r=>server.close(r));rmSync(folder,{recursive:true,force:true});});
+ const base='http://127.0.0.1:'+port;const modules=new Set(['app.js','banking.js']);for(const name of modules){const code=readFileSync(new URL('../public/'+name,import.meta.url),'utf8');for(const match of code.matchAll(/from ['"]\.\/([^'"]+\.js)['"]/g))modules.add(match[1]);}for(const name of modules){const response=await fetch(base+'/'+name);assert.equal(response.status,200,name+' must load before login');assert.match(response.headers.get('content-type'),/javascript/);assert.ok((await response.text()).length>0);}
+ for(const path of ['/api/state','/api/banking','/api/security-policy'])assert.equal((await fetch(base+path)).status,401,path);
+ assert.equal((await fetch(base+'/request.js',{method:'POST'})).status,401);
+});

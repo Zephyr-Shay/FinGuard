@@ -1,0 +1,35 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Readable} from 'node:stream';import {mkdirSync,mkdtempSync,rmSync,writeFileSync} from 'node:fs';import {resolve,join,sep} from 'node:path';import {Accounts} from '../accounts.mjs';import {createHandler} from '../server.mjs';import {otp,base32} from '../totp.mjs';
+const password='Demo-Reset-Test-2026!',pin='592748',secret=base32(Buffer.from('demo-reset-fixture-20'));
+async function fixture(t,{bound=true}={}){
+ const root=resolve('.test-data');mkdirSync(root,{recursive:true});const dir=mkdtempSync(join(root,'demo-reset-'));let now=Date.now();const a=new Accounts(dir,{now:()=>now});await a.create('reset_test',password);const login=await a.login('reset_test',password);await a.setPayment(login.token,{loginPassword:password,newPin:pin});if(bound)a.db.prepare('INSERT INTO mfa VALUES(?,?,?)').run(login.user.id,a.box.seal(secret,login.user.id),-1);const h=createHandler({folder:dir,scheduler:false,configured:()=>false,now:()=>now});
+ const call=async(path,body,token=login.token,userId=login.user.id)=>{const req=Readable.from(body===undefined?[]:[JSON.stringify(body)]);Object.assign(req,{url:path,method:body===undefined?'GET':'POST',headers:{host:'127.0.0.1:4317',origin:'http://127.0.0.1:4317','content-type':'application/json',cookie:'fg_session='+token,'x-finguard-user':userId}});let status,result,cookie;await h(req,{setHeader(k,v){if(k==='Set-Cookie')cookie=v.match(/fg_session=([^;]+)/)?.[1];},writeHead(c){status=c;},end(v){result=JSON.parse(v);}});return{status,body:result,cookie};};
+ t.after(()=>{h.close();a.close();assert.ok(dir.startsWith(root+sep));rmSync(dir,{recursive:true,force:true});});return{dir,a,h,login,call,advance:()=>now+=30000,code:()=>otp(secret,now),time:()=>now,body:()=>({confirm:'RESET_DEMO',loginPassword:password,totp:otp(secret,now)})};
+}
+test('Demo reset requires current identity proof; wrong or missing factors leave state and credentials intact',async t=>{
+ const f=await fixture(t);const before=(await f.call('/api/state')).body;
+ for(const body of [{confirm:'RESET_DEMO'},{...f.body(),loginPassword:'wrong'},{...f.body(),totp:'bad'},{...f.body(),totp:''}])assert.equal((await f.call('/api/reset',body)).status,400);
+ assert.equal(f.a.paymentStatus(f.login.user.id),true);assert.equal(f.a.mfaStatus(f.login.user.id),true);assert.equal((await f.call('/api/state')).body.balance,before.balance);assert.deepEqual((await f.call('/api/state')).body.tasks,before.tasks);
+});
+test('Verified reset atomically clears PIN, MFA and unfinished enrollment; rotates all sessions and preserves other users',async t=>{
+ const f=await fixture(t),id=f.login.user.id,other=await f.a.create('other_user',password),ol=await f.a.login('other_user',password),second=await f.a.login('reset_test',password);await f.a.setPayment(ol.token,{loginPassword:password,newPin:'739284'});await f.a.beginMfa(f.login.token,password,f.code());f.advance();
+ await f.call('/api/plan',{message:'给小林转200元'});const r=await f.call('/api/reset',f.body());assert.equal(r.status,200);assert.equal(r.body.requiresSecuritySetup,true);assert.ok(r.cookie);assert.notEqual(r.cookie,f.login.token);assert.equal(f.a.user(f.login.token),null);assert.equal(f.a.user(second.token),null);assert.equal(f.a.user(r.cookie).id,id);assert.equal(f.a.paymentStatus(id),false);assert.equal(f.a.mfaStatus(id),false);assert.equal(f.a.db.prepare('SELECT 1 FROM mfa_pending WHERE user_id=?').get(id),undefined);assert.equal(f.a.paymentStatus(other.id),true);assert.ok(f.a.user(ol.token));assert.equal((await f.call('/api/state',undefined,r.cookie)).body.tasks.length,0);assert.equal((await f.call('/api/state',undefined,f.login.token)).status,401);
+});
+test('Reset disables password-free grants and trusted payees while retaining cumulative security totals',async t=>{
+ const f=await fixture(t);await f.call('/api/state');
+ assert.equal((await f.call('/api/security-policy',{simplify:true,threshold:100000,paymentPin:pin,totp:f.code()})).status,200);f.advance();
+ const p=(await f.call('/api/plan',{message:'给小林转200元'})).body;assert.equal((await f.call('/api/tasks/'+p.id+'/approve',{token:p.token,paymentPin:pin,totp:f.code()})).status,200);f.advance();const r=await f.call('/api/reset',f.body());assert.equal(r.status,200);
+ const s=(await f.call('/api/security-policy',undefined,r.cookie)).body;assert.equal(s.simplify,false);assert.ok(s.used>=20000);const p2=(await f.call('/api/plan',{message:'给小林转1元'},r.cookie)).body;const detail=(await f.call('/api/tasks/'+p2.id,undefined,r.cookie)).body;assert.equal(detail.verification.pin,true);assert.equal(detail.verification.totp,true);assert.equal((await f.call('/api/tasks/'+p2.id+'/approve',{token:p2.token},r.cookie)).status,400);
+});
+test('User without a bound verifier can reset using login password, then set a fresh PIN and bind a new verifier',async t=>{
+ const f=await fixture(t,{bound:false});const r=await f.call('/api/reset',{confirm:'RESET_DEMO',loginPassword:password});assert.equal(r.status,200);const token=r.cookie;assert.deepEqual((await f.call('/api/auth/payment',undefined,token)).body,{configured:false,mfa:false});
+ assert.equal((await f.call('/api/auth/payment',{loginPassword:password,newPin:'739284'},token)).status,200);const setup=(await f.call('/api/auth/mfa/begin',{password},token)).body;assert.ok(setup.secret);assert.notEqual(setup.secret,secret);assert.equal((await f.call('/api/auth/mfa/confirm',{totp:otp(setup.secret,f.time())},token)).status,200);assert.deepEqual((await f.call('/api/auth/payment',undefined,token)).body,{configured:true,mfa:true});
+});
+test('Reset cannot unlink an existing verifier using only a logged-in session; invalid identity attempts are limited',async t=>{
+ const f=await fixture(t);for(let i=0;i<5;i++)assert.equal((await f.call('/api/reset',{confirm:'RESET_DEMO',loginPassword:password})).status,400);assert.equal((await f.call('/api/reset',f.body())).status,429);assert.equal(f.a.mfaStatus(f.login.user.id),true);
+});
+test('Prepared reset rejects stale sessions or changed security state before any deletion',async t=>{
+ const f=await fixture(t);const prepared=await f.a.prepareDemoReset(f.login.token,f.body());await f.a.setPayment(f.login.token,{loginPassword:password,currentPin:pin,newPin:'739284'});f.a.db.exec('BEGIN IMMEDIATE');try{assert.throws(()=>prepared.apply(),/变化/);}finally{f.a.db.exec('ROLLBACK');}assert.equal(f.a.mfaStatus(f.login.user.id),true);assert.equal(f.a.paymentStatus(f.login.user.id),true);
+});
+test('Credential and session deletion rolls back if reset state persistence fails',async t=>{
+ const f=await fixture(t);await f.call('/api/plan',{message:'给小林转200元'});const before=(await f.call('/api/state')).body;writeFileSync(join(f.dir,'users',f.login.user.id,'archives'),'fault fixture');const r=await f.call('/api/reset',f.body());assert.ok(r.status>=400);assert.equal(r.cookie,undefined);assert.equal(f.a.paymentStatus(f.login.user.id),true);assert.equal(f.a.mfaStatus(f.login.user.id),true);assert.ok(f.a.user(f.login.token));assert.deepEqual((await f.call('/api/state')).body.tasks,before.tasks);
+});

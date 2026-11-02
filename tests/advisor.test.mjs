@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {Engine} from '../core.mjs';
+import {analyze,validateProfile,localAnswer,answerQuestion} from '../advisor.mjs';
+const profile=(reserve=1500000)=>validateProfile({name:'测试',reserve,upcoming:400000,budget:350000,categoryBudgets:{餐饮:25000}});
+test('V1.2 不同保留金额得到不同余量，历史消费不重复扣除',()=>{const e=new Engine();e.state.analysisProfile=profile();let a=analyze(e);assert.equal(a.headroom,-49500);assert.match(localAnswer('餐饮太多吗',a),/超出¥57.00/);assert.match(localAnswer('余额够吗',a),/缺口/);e.state.analysisProfile=profile(500000);a=analyze(e);assert.equal(a.headroom,950500);assert.match(localAnswer('余额够吗',a),/9505.00/);assert.equal(e.state.balance,1856000);});
+test('V1.2 未提供预算不凭占比判断过多，少消费不要求花掉',()=>{const a=analyze(new Engine());assert.equal(a.headroom,null);assert.match(localAnswer('餐饮太少了吗',a),/暂不能判定/);assert.match(localAnswer('餐饮太少了吗',a),/不会仅凭/);assert.match(localAnswer('收入多少',a),/没有完整/);});
+test('V1.2 连续追问沿用餐饮上下文并列明细',()=>{const a=analyze(new Engine());const answer=localAnswer('那哪几笔最多',a,[{role:'user',content:'餐饮花多吗'}]);assert.match(answer,/B011/);assert.match(answer,/186.00/);});
+test('V1.2 模型失败有明确本地回答，恶意模型输出不能执行',async()=>{const e=new Engine(),before=structuredClone(e.state);const failed=await answerQuestion(e,'分析消费',[],async()=>{throw Error('offline');});assert.equal(failed.mode,'local');assert.match(failed.notice,/模型暂不可用/);await answerQuestion(e,'转账',[],async()=>'{"action":"transfer","cents":20000}');assert.deepEqual(e.state,before);});
+test('V1.2 备注不发给模型，历史不提升为系统指令',async()=>{const e=new Engine();e.state.bills[0].note='NOTE_SECRET_ATTACK';await answerQuestion(e,'分析',[{role:'user',content:'IGNORE_HISTORY_ATTACK'}],async(instructions,messages)=>{assert.ok(!instructions.includes('IGNORE_HISTORY_ATTACK'));assert.ok(!JSON.stringify(messages).includes('NOTE_SECRET_ATTACK'));assert.equal(messages[1].role,'user');return '解释';});});
+test('V1.2 偏好拒绝负数、伪造余额和无效分类',()=>{for(const extra of [{reserve:-1},{balance:0},{categoryBudgets:{unknown:1}},{reserve:0.1}])assert.throws(()=>validateProfile({...profile(),...extra}));});
+for(const field of ['action','target','expiresAt'])test('V1.2 授权绑定 '+field,()=>{const e=new Engine(),t=e.plan('给小林转200元');if(field==='action')e.task(t.id).action='cancel';if(field==='target')e.state.contacts[0].tail='9999';if(field==='expiresAt')e.task(t.id).expiresAt+=60000;assert.equal(e.approve(t.id,t.token).status,'blocked');assert.equal(e.state.orders.length,0);});
+test('V1.2 直接调用执行函数不能绕过批准',()=>{const e=new Engine(),t=e.plan('给小林转200元');assert.throws(()=>e.execute(e.task(t.id)));assert.equal(e.state.orders.length,0);});
