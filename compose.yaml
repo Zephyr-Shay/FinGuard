@@ -1,0 +1,37 @@
+name: finguard
+services:
+  app:
+    build: .
+    image: finguard:1.0.0-demo-reset-20261102-r5
+    env_file:
+      - path: /opt/finguard/model.env
+        required: false
+    environment:
+      FINGUARD_REVIEW_DEMO: "1"
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:4317:4317"
+    volumes:
+      - /opt/finguard/data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 768m
+    cpus: 1.5
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4317/api/health').then(async r=>{const d=await r.json();process.exit(r.ok&&d.version==='1.0.0'?0:1)}).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 15s

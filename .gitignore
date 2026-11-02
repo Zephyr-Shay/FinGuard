@@ -1,0 +1,5 @@
+.data/
+.test-data/
+.env
+node_modules/
+test-results.txt

@@ -1,0 +1,4 @@
+import {seed} from './core.mjs';import {initBank} from './banking.mjs';
+export function scenario(id){if(!['steady','tight','locked'].includes(id))throw Error('场景不存在');const s=seed();initBank(s);s.balance=id==='tight'?550000:1856000;if(id==='locked')s.banking.cards[0].status='locked';s.contacts[0]={...s.contacts[0],alias:'爸爸',description:'演示设定：此联系人是爸爸，不是模型推测'};
+ s.bills=[];for(let m=1;m<=12;m++)for(const [day,merchant,category,cents] of [[1,'房屋租金','居住',280000],[3,'云音乐','订阅',1800],[5,'云盘空间','订阅',1200],[6,'视频会员','订阅',2500],[12,'日常餐饮','餐饮',id==='tight'?100000:60000],[20,'城市交通','交通',6000]])s.bills.push({id:`D${m}-${day}`,date:`2026-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`,merchant,category,cents,note:'全年合成场景：日期包含未来模拟记录，非真实历史'});
+ s.dataset={id,label:{steady:'稳定预算',tight:'余额不足',locked:'付款卡锁定'}[id],simulation:true,coverage:'2026全年合成场景（含未来模拟记录）'};return s;}
