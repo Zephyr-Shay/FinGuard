@@ -1,0 +1,12 @@
+const h=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const primaryLinks=[['home','首页','/?view=home'],['bills','账单','/?view=bills'],['cards','卡片','/banking.html#cards'],['wealth','理财','/banking.html#wealth']];
+export function pendingCount(s){return (s.tasks||[]).filter(t=>['approval','clarify','collecting','pending'].includes(t.status)).length+(s.bankPlans||s.plans||[]).filter(p=>['approval','paused','invalidated'].includes(p.status)).length;}
+export function navigationHTML({section='home',name='我的账户',pending=0}={}){return `<header class="site-header"><div class="site-inner"><a class="site-brand" href="/?view=home" data-nav="home">FinGuard</a><nav class="site-primary" aria-label="主导航">${primaryLinks.map(([id,label,url])=>`<a href="${url}" ${['home','bills'].includes(id)?`data-nav="${id}"`:''} ${section===id?'class="active" aria-current="page"':''}>${label}</a>`).join('')}</nav><div class="site-account"><button type="button" class="nav-pending ${pending?'has-pending':''}" data-nav="pending" aria-label="待办，${pending}项">待办<span>${pending}</span></button><details class="account-menu"><summary aria-label="个人菜单"><span class="avatar">${h(name.slice(0,1).toUpperCase())}</span><span class="account-title">${h(name)}</span><span class="account-chevron" aria-hidden="true">⌄</span></summary><div class="account-popover"><a href="/?view=profile" data-nav="profile">个人中心</a><button type="button" data-open-security>账户安全</button><a href="/banking.html#history">操作记录</a><button type="button" id="reset">重置演示数据</button><button type="button" id="logout">退出登录</button></div></details></div></div></header>`;}
+let current=null,installed=false;
+export function bindNavigation(host,{onPending,onReset,onLogout}={}){
+ if(!host)return;current=host;const menu=host.querySelector('.account-menu');
+ for(const [selector,handler] of [['[data-nav=pending]',onPending],['#reset',onReset],['#logout',onLogout]]){const button=host.querySelector(selector);if(button&&handler)button.onclick=handler;}
+ host.addEventListener('click',e=>{if(e.target.closest('.account-popover a,.account-popover button'))menu.open=false;});
+ host.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.open){menu.open=false;menu.querySelector('summary').focus();e.preventDefault();}});
+ if(!installed){document.addEventListener('click',e=>{if(current&&!current.querySelector('.account-menu')?.contains(e.target)){const open=current.querySelector('.account-menu');if(open)open.open=false;}});installed=true;}
+}
