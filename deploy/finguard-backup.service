@@ -1,0 +1,7 @@
+[Unit]
+Description=FinGuard consistent private beta backup
+Requires=docker.service
+After=docker.service
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/finguard/current/deploy/backup.sh
